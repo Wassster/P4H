@@ -1,86 +1,108 @@
 package OV.Domein;
 
-
+import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "Reiziger")
 public class Reiziger {
-    private int id;
-    private String voorletters;
-    private String tussenvoegsel;
-    private String achternaam;
-    private Date geboortedatum;
-    private ArrayList<OVChipkaart> ovChipkaarts = new ArrayList<>();
 
+    @Id
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "voorletters", nullable = false)
+    private String voorletters;
+
+    @Column(name = "tussenvoegsel")
+    private String tussenvoegsel;
+
+    @Column(name = "achternaam", nullable = false)
+    private String achternaam;
+
+    @Column(name = "geboortedatum", nullable = false)
+    private Date geboortedatum;
+
+    @OneToMany(mappedBy = "reiziger", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OVChipkaart> ovChipkaarts = new ArrayList<>();
+
+
+    public Reiziger() {
+    }
 
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
-        this.id = id;
+        this.id= id;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam = achternaam;
         this.geboortedatum = geboortedatum;
     }
 
-    public String getAchternaam() {
-        return achternaam;
+
+    public int getId() {
+        return id;
     }
 
     public String getVoorletters() {
         return voorletters;
     }
 
+    public void setVoorletters(String voorletters) {
+        this.voorletters = voorletters;
+    }
+
     public String getTussenvoegsel() {
         return tussenvoegsel;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public ArrayList<OVChipkaart> getOvChipkaarts() {
-        return ovChipkaarts;
-    }
-    public void addOVchips(OVChipkaart ovChipkaart) {
-        ovChipkaarts.add(ovChipkaart);
-    }
-
-    public void setOvChipkaarts(ArrayList<OVChipkaart> ovChipkaarts) {
-        this.ovChipkaarts = ovChipkaarts;
-    }
-
-    public Date getGeboortedatum() {
-        return geboortedatum;
     }
 
     public void setTussenvoegsel(String tussenvoegsel) {
         this.tussenvoegsel = tussenvoegsel;
     }
 
+    public String getAchternaam() {
+        return achternaam;
+    }
+
     public void setAchternaam(String achternaam) {
         this.achternaam = achternaam;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Date getGeboortedatum() {
+        return geboortedatum;
     }
-
 
     public void setGeboortedatum(Date geboortedatum) {
         this.geboortedatum = geboortedatum;
     }
 
-    public void setVoorletters(String voorletters) {
-        this.voorletters = voorletters;
+    public List<OVChipkaart> getOvChipkaarts() {
+        return ovChipkaarts;
+    }
+
+    public void setOvChipkaarts(List<OVChipkaart> ovChipkaarts) {
+        this.ovChipkaarts = ovChipkaarts;
+    }
+
+    public void addOVChipkaart(OVChipkaart ovChipkaart) {
+        ovChipkaarts.add(ovChipkaart);
+        ovChipkaart.setReiziger(this);
+    }
+
+    public void removeOVChipkaart(OVChipkaart ovChipkaart) {
+        ovChipkaarts.remove(ovChipkaart);
+        ovChipkaart.setReiziger(null);
     }
 
     @Override
     public String toString() {
-        return String.format("Reiziger {#%d %s%s %s, geb. %s, %s}",
+        return String.format("Reiziger {#%d %s %s %s, geb. %s}",
                 id,
                 voorletters,
-                tussenvoegsel,
+                (tussenvoegsel != null ? tussenvoegsel + " " : ""),
                 achternaam,
-                geboortedatum.toString());
+                geboortedatum);
     }
 }
