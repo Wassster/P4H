@@ -57,9 +57,15 @@ public class ReizigerDAOHibernate implements ReizigerDAO {
     @Override
     public Reiziger findById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Reiziger.class, id);
+            Reiziger reiziger = session.get(Reiziger.class, id);
+            if (reiziger != null) {
+
+                reiziger.getOvChipkaarts().size();
+            }
+            return reiziger;
         }
     }
+
 
     @Override
     public List<Reiziger> findAll() {

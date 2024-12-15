@@ -1,6 +1,12 @@
 package OV.Util;
+
+import OV.Domein.OVChipkaart;
+import OV.Domein.Reiziger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
+import java.sql.Date;
+import java.util.List;
 
 public class HibernateUtil {
 
@@ -23,3 +29,5 @@ public class HibernateUtil {
         getSessionFactory().close();
     }
 }
+
+
